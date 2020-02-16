@@ -6,6 +6,7 @@ import IMarkerWrapper from '../interface/IMarkerWrapper';
 interface IMarkerRender {
     markersToRender: IMarkerWrapper[]
     onMarkerClick: Function
+    userLocation: google.maps.LatLng
 }
 
 class MarkerRenderer extends Component<IMarkerRender> {
@@ -21,15 +22,18 @@ class MarkerRenderer extends Component<IMarkerRender> {
 
     render() {
 
-        const { markersToRender, onMarkerClick } = this.props;
+        const { markersToRender, userLocation, onMarkerClick } = this.props;
 
         return (
+            <div>
+                <Marker position={userLocation} clickable={false}/>
             <div>
                 {markersToRender.map((e, index) => {
                     return <Marker key={index} position={e.marker} clickable={true}
                         onClick={() => onMarkerClick(e)} icon={this.getMarker(e.type)} />
                 })}
 
+            </div>
             </div>
         )
     }

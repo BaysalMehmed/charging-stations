@@ -101,7 +101,7 @@ class MapContainer extends Component {
           center={userLocation != null ? userLocation : ChargerApi.getMarkers()[0].marker}
           onClick={this.onMapClicked}>
 
-          <MarkerRenderer markersToRender={markersToRender} onMarkerClick={this.onMarkerClick} ></MarkerRenderer>
+          <MarkerRenderer markersToRender={markersToRender} userLocation={userLocation} onMarkerClick={this.onMarkerClick} ></MarkerRenderer>
 
           <InfoWindowContainer
             markerWrapper={markerWrapper}
