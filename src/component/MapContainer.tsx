@@ -93,7 +93,7 @@ class MapContainer extends Component {
 
     return (
 
-      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDfGvw5rt-MyoRRKcNgs0HaNumY7uDDvyk" >
+      <LoadScript id="script-loader" googleMapsApiKey="API" >
 
         <GoogleMap
           id='map'
