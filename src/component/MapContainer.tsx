@@ -7,6 +7,7 @@ import MarkerRenderer from './MarkerRenderer';
 import ChargerApi from '../api/ChargerApi'
 import IChargerFilter from '../interface/IChargerFilter';
 import MapFilter from './MapFilter';
+import ChargerList from './ChargerList';
 
 class MapContainer extends Component {
 
@@ -15,22 +16,36 @@ class MapContainer extends Component {
     this.handleToggle = this.handleToggle.bind(this)
     this.onMarkerClick = this.onMarkerClick.bind(this)
     this.onMapClicked = this.onMapClicked.bind(this)
+    this.onChargerListItemClick = this.onChargerListItemClick.bind(this)
   }
 
   state = {
     showingInfoWindow: false,
     markerWrapper: null,
-    filterOptions: { filterChargers: this.getChargerTypesForFilter() }
+    filterOptions: { filterChargers: this.getChargerTypesForFilter() },
+    userLocation: null
   };
 
-  onMarkerClick(markerWrapper: IMarkerWrapper){
-      return this.setState({
-        showingInfoWindow: true,
-        markerWrapper: markerWrapper
-      });
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+
+        this.setState({
+          userLocation: { lat: latitude, lng: longitude }
+        });
+      }
+    );
+  }
+
+  onMarkerClick(markerWrapper: IMarkerWrapper) {
+    return this.setState({
+      showingInfoWindow: true,
+      markerWrapper: markerWrapper
+    });
   };
 
-  onMapClicked(){
+  onMapClicked() {
     if (this.state.showingInfoWindow) {
       this.setState({
         showingInfoWindow: false,
@@ -49,9 +64,16 @@ class MapContainer extends Component {
     newFilterChargers[chargerTypeIndex].showType = !filterOptions.filterChargers[chargerTypeIndex].showType
 
     this.setState({
-      filterOptions2: { filterChargers: newFilterChargers }
+      filterOptions: { filterChargers: newFilterChargers }
     })
 
+  }
+
+  onChargerListItemClick(markerWrapper: IMarkerWrapper){
+    return this.setState({
+      showingInfoWindow: true,
+      markerWrapper: markerWrapper
+    });
   }
 
   getChargerTypesForFilter(): IChargerFilter[] {
@@ -66,17 +88,17 @@ class MapContainer extends Component {
 
   render() {
 
-    const { filterOptions, markerWrapper, showingInfoWindow } = this.state
+    const { filterOptions, markerWrapper, showingInfoWindow, userLocation } = this.state
     const markersToRender = this.filterChargersToRender(ChargerApi.getMarkers(), filterOptions.filterChargers)
 
     return (
 
-      <LoadScript id="script-loader" googleMapsApiKey="APIKEY" >
+      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyDfGvw5rt-MyoRRKcNgs0HaNumY7uDDvyk" >
 
         <GoogleMap
           id='map'
           zoom={14}
-          center={ChargerApi.getMarkers()[0].marker}
+          center={userLocation != null ? userLocation : ChargerApi.getMarkers()[0].marker}
           onClick={this.onMapClicked}>
 
           <MarkerRenderer markersToRender={markersToRender} onMarkerClick={this.onMarkerClick} ></MarkerRenderer>
@@ -88,9 +110,11 @@ class MapContainer extends Component {
 
         </GoogleMap>
         <MapFilter chargerFilters={filterOptions.filterChargers} handleFilterToggle={this.handleToggle} />
-      
+
+        <ChargerList markersToRender={markersToRender} onChargerListItemClick={this.onChargerListItemClick} />
       </LoadScript>
-      
+
+
     )
   }
 }

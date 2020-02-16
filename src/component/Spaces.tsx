@@ -20,23 +20,24 @@ class Spaces extends Component<ISpace> {
         return spacesString;
     }
 
-    getMarker(marker: String){
+    getMarker(marker: String) {
 
-        switch(marker){
-            case("F"):
-            return "R"
-            default: 
-            return "G"
+        switch (marker) {
+            case ("F"):
+                return require('../icons/spaceMarkers/full.png')
+            default:
+                return require('../icons/spaceMarkers/empty.png')
         }
     }
 
     render() {
 
-        const {totalSpaces, usedSpaces} = this.props;
+        const { totalSpaces, usedSpaces } = this.props;
 
         return (
             <div>
-                <b>Spaces: </b> {this.drawSpaces(totalSpaces, usedSpaces).map((e) => this.getMarker(e))}
+                <b>Spaces: </b> {this.drawSpaces(totalSpaces, usedSpaces).map((e, index) =>
+                    <img key={index} src={this.getMarker(e)} alt={e.toString()} />)}
             </div>
         )
     }
