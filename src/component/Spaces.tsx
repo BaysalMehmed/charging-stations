@@ -7,41 +7,28 @@ interface ISpace {
 
 class Spaces extends Component<ISpace> {
 
-    drawSpaces(totalSpaces: number, usedSpaces: number): String[] {
+    drawSpaces(totalSpaces: number, usedSpaces: number): {image: any, alt: string}[] {
 
         let spacesString = [];
         for (let i = 1; i <= totalSpaces; i++) {
             if (i <= usedSpaces) {
-                spacesString.push("F")
+                spacesString.push({image: require('../icons/spaceMarkers/full.png'), alt: 'Full'})
             } else {
-                spacesString.push("E")
+                spacesString.push({image: require('../icons/spaceMarkers/empty.png'), alt: 'Empty'})
             }
         }
         return spacesString;
     }
 
-    getMarker(marker: String) {
-
-        switch (marker) {
-            case ("F"):
-                return require('../icons/spaceMarkers/full.png')
-            default:
-                return require('../icons/spaceMarkers/empty.png')
-        }
-    }
-
     render() {
-
         const { totalSpaces, usedSpaces } = this.props;
-
         return (
             <div>
-                <b>Spaces: </b> {this.drawSpaces(totalSpaces, usedSpaces).map((e, index) =>
-                    <img key={index} src={this.getMarker(e)} alt={e.toString()} />)}
+                <b>Spaces: </b> {this.drawSpaces(totalSpaces, usedSpaces).map((space, index) =>
+                    <img key={index} src={space.image} alt={space.alt} />)}    
             </div>
         )
     }
-
 }
 
 export default Spaces
