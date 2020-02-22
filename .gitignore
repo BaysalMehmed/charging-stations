@@ -130,3 +130,8 @@ fabric.properties
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
 
+/.idea/
+/.settings/
+/charging-station-service/.settings/
+/charging-station-service/.gradle/
+/charging-station-service/bin/
