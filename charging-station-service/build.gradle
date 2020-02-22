@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
 group 'com.baysalmehmed'
@@ -12,5 +14,6 @@ repositories {
 }
 
 dependencies {
+    compileOnly group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.4.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
