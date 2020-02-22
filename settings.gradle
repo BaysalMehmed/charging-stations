@@ -1,0 +1,3 @@
+rootProject.name = 'charging-stations-app'
+include 'charging-station-web'
+include 'charging-station-service'
