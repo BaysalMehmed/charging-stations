@@ -1,6 +1,7 @@
 package com.baysalmehmed.controller;
 
-import com.baysalmehmed.model.Charger;
+import com.baysalmehmed.model.in.ChargerIn;
+import com.baysalmehmed.model.out.ChargerOut;
 import com.baysalmehmed.service.ChargerService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,17 +17,17 @@ public class ChargerController {
     }
 
     @RequestMapping("/chargers")
-    public List<Charger> getAllChargers(){
+    public List<ChargerOut> getAllChargers(){
         return chargerService.getChargers();
     }
 
     @RequestMapping("/charger")
-    public Charger getChargerById(@RequestParam(name = "id") Integer id){
+    public ChargerOut getChargerById(@RequestParam(name = "id") Integer id){
         return chargerService.getCharger(id);
     }
 
     @PostMapping("/charger/add")
-    public Integer createNewCharger(@RequestBody Charger newCharger){
+    public ChargerOut createNewCharger(@RequestBody ChargerIn newCharger){
         return chargerService.createCharger(newCharger);
     }
 

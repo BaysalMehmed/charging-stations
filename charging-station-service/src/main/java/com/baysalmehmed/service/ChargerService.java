@@ -1,10 +1,13 @@
 package com.baysalmehmed.service;
 
-import com.baysalmehmed.factory.ChargerDaoFactory;
-import com.baysalmehmed.factory.ChargerFactory;
-import com.baysalmehmed.model.Charger;
+import com.baysalmehmed.factory.charger.ChargerDaoFactory;
+import com.baysalmehmed.factory.charger.ChargerFactory;
 import com.baysalmehmed.model.dao.ChargerDao;
+import com.baysalmehmed.model.dao.ChargerTypeDao;
+import com.baysalmehmed.model.in.ChargerIn;
+import com.baysalmehmed.model.out.ChargerOut;
 import com.baysalmehmed.repository.ChargerRepository;
+import com.baysalmehmed.repository.ChargerTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,23 +17,29 @@ import java.util.Optional;
 public class ChargerService {
 
     private ChargerRepository chargerRepository;
+    private List<ChargerTypeDao> chargerTypeDaos;
 
-    public ChargerService(ChargerRepository chargerRepository) {
+    public ChargerService(ChargerRepository chargerRepository, ChargerTypeRepository chargerTypeRepository) {
         this.chargerRepository = chargerRepository;
+        this.chargerTypeDaos = chargerTypeRepository.findAll();
     }
 
-    public List<Charger> getChargers(){
-        return ChargerFactory.createChargers(chargerRepository.findAll());
+    public List<ChargerOut> getChargers(){
+        return ChargerFactory.createChargers(chargerRepository.findAll(), chargerTypeDaos);
     }
 
-    public Charger getCharger(Integer chargerId){
+    public ChargerOut getCharger(Integer chargerId){
+        ChargerOut chargerOut = null;
         Optional<ChargerDao> chargerDao = chargerRepository.findById(chargerId);
-        return chargerDao.map(ChargerFactory::createCharger).orElse(null);
+        if(chargerDao.isPresent()) {
+            chargerOut = ChargerFactory.createCharger(chargerDao.get(), chargerTypeDaos);
+        }
+        return chargerOut;
     }
 
-    public Integer createCharger(Charger newCharger){
+    public ChargerOut createCharger(ChargerIn newCharger){
         ChargerDao savedCharger = chargerRepository.save(ChargerDaoFactory.createCharger(newCharger));
-        return savedCharger.id;
+        return ChargerFactory.createCharger(savedCharger, chargerTypeDaos);
     }
 
     public void deleteCharger(Integer chargerId){

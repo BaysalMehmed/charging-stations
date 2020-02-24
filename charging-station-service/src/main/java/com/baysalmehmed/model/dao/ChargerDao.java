@@ -12,8 +12,8 @@ public class ChargerDao {
     @SequenceGenerator(name="author_generator", sequenceName = "charger_seq", allocationSize=1)
     public Integer id;
 
-    @Column(name = "TYPE", nullable = false, length = 50)
-    public String type;
+    @Column(name = "TYPE", nullable = false)
+    public Integer type;
 
     @Column(name = "DESCRIPTION", nullable = true, length = 50)
     public String description;
@@ -33,7 +33,7 @@ public class ChargerDao {
     public ChargerDao() {
     }
 
-    public ChargerDao(String type, String description, Integer totalSpaces, Integer usedSpaces, Double longitude, Double latitude) {
+    public ChargerDao(Integer type, String description, Integer totalSpaces, Integer usedSpaces, Double longitude, Double latitude) {
         this.type = type;
         this.description = description;
         this.totalSpaces = totalSpaces;
