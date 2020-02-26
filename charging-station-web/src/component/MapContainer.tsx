@@ -120,7 +120,7 @@ class MapContainer extends Component<null, IMapContainer> {
 
     return (
 
-      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyBdexJZAdjGs-Bdoo8sTRf6PAdI03PUEo8" >
+      <LoadScript id="script-loader" googleMapsApiKey="API" >
 
         <GoogleMap
           id='map'
