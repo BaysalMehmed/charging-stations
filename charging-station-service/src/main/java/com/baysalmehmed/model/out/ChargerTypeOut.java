@@ -1,7 +1,5 @@
 package com.baysalmehmed.model.out;
 
-import com.baysalmehmed.model.in.ChargerTypeIn;
-
 public class ChargerTypeOut{
 
     public Integer id;
