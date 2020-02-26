@@ -1,7 +1,8 @@
+import IMarkerWrapper from "./IMarkerWrapper";
 
 interface IChargerFilter{
-    type: String
-    showType: boolean
+    charger: IMarkerWrapper
+    show: boolean
   }
 
 export default IChargerFilter

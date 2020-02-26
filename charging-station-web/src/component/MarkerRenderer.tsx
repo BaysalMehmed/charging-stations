@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Marker } from '@react-google-maps/api'
 import '../../src/css/default.css'
-import IMarkerWrapper from '../interface/IMarkerWrapper';
+import IChargerFilter from '../interface/IChargerFilter';
 
 interface IMarkerRender {
-    markersToRender: IMarkerWrapper[]
+    markersToRender: IChargerFilter[]
     onMarkerClick: Function
-    userLocation: google.maps.LatLng
+    onMarkerLoad: Function
 }
 
 class MarkerRenderer extends Component<IMarkerRender> {
@@ -22,18 +22,17 @@ class MarkerRenderer extends Component<IMarkerRender> {
 
     render() {
 
-        const { markersToRender, userLocation, onMarkerClick } = this.props;
+        const { markersToRender, onMarkerClick, onMarkerLoad } = this.props;
 
         return (
             <div>
-                <Marker position={userLocation} clickable={false}/>
-            <div>
                 {markersToRender.map((e, index) => {
-                    return <Marker key={index} position={e.marker} clickable={true}
-                        onClick={() => onMarkerClick(e)} icon={this.getMarker(e.type)} />
+                    return <Marker visible={e.show} key={index} position={e.charger.marker} clickable={true}
+                        onClick={() => onMarkerClick(e.charger)} onLoad={(marker => onMarkerLoad(marker, e.charger.id))} 
+                        icon={this.getMarker(e.charger.type)} 
+                        />
                 })}
 
-            </div>
             </div>
         )
     }

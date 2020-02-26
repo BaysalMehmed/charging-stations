@@ -1,6 +1,7 @@
 import IMarker from "./IMarker";
 
 interface IMarkerWrapper {
+  id: number
   marker: IMarker
   description: String
   type: String

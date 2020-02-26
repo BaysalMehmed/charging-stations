@@ -1,29 +1,39 @@
 import React, { Component } from 'react'
-import { GoogleMap, LoadScript } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import '../../src/css/default.css'
 import InfoWindowContainer from './InfoWindowContainer';
-import IMarkerWrapper from '../interface/IMarkerWrapper';
 import MarkerRenderer from './MarkerRenderer';
 import ChargerApi from '../api/ChargerApi'
-import IChargerFilter from '../interface/IChargerFilter';
+import IChargerTypeFilter from '../interface/IChargerTypeFilter';
 import MapFilter from './MapFilter';
 import ChargerList from './ChargerList';
+import UserLocation from './CurrentLocation'
+import IChargerFilter from '../interface/IChargerFilter';
 
-class MapContainer extends Component {
+interface IMapContainer {
+  showingInfoWindow: boolean,
+  markerWrapper: IChargerFilter,
+  filterOptions: { filterChargers: IChargerTypeFilter[] },
+  userLocation: { lat: number, lng: number },
+  markerMap: any
+}
+
+class MapContainer extends Component<null, IMapContainer> {
 
   constructor(props) {
     super(props)
     this.handleToggle = this.handleToggle.bind(this)
     this.onMarkerClick = this.onMarkerClick.bind(this)
+    this.onMarkerLoad = this.onMarkerLoad.bind(this)
     this.onMapClicked = this.onMapClicked.bind(this)
-    this.onChargerListItemClick = this.onChargerListItemClick.bind(this)
   }
 
   state = {
     showingInfoWindow: false,
     markerWrapper: null,
     filterOptions: { filterChargers: this.getChargerTypesForFilter() },
-    userLocation: null
+    userLocation: null,
+    markerMap: {}
   };
 
   componentDidMount() {
@@ -38,12 +48,21 @@ class MapContainer extends Component {
     );
   }
 
-  onMarkerClick(markerWrapper: IMarkerWrapper) {
+  onMarkerClick(markerWrapper: IChargerFilter) {
+    this.setState({
+      showingInfoWindow: false
+    })
     return this.setState({
       showingInfoWindow: true,
       markerWrapper: markerWrapper
     });
   };
+
+  onMarkerLoad(marker: Marker, markerId: number) {
+    return this.setState(prevState => ({
+      markerMap: { ...prevState.markerMap, [markerId]: marker }
+      }));
+    };
 
   onMapClicked() {
     if (this.state.showingInfoWindow) {
@@ -56,44 +75,52 @@ class MapContainer extends Component {
 
   handleToggle(chargerType: String) {
 
-    var { filterOptions } = this.state
+    var { filterOptions, markerWrapper} = this.state
 
     var chargerTypeIndex = filterOptions.filterChargers.findIndex(e => e.type === chargerType)
 
     const newFilterChargers = filterOptions.filterChargers.slice()
     newFilterChargers[chargerTypeIndex].showType = !filterOptions.filterChargers[chargerTypeIndex].showType
 
-    this.setState({
+    const resetFocus = markerWrapper != null ? (markerWrapper.type === chargerType ? false : true) : false
+
+    this.setState(prevState => ({
+      showingInfoWindow: resetFocus,
+      markerWrapper: resetFocus ? prevState.markerWrapper : null,
       filterOptions: { filterChargers: newFilterChargers }
+    }))
+
+  }
+
+  getChargersForFilter(): IChargerFilter[]{
+
+    return ChargerApi.getMarkers().map((e) => {
+      return {charger: e, show: true}
     })
-
   }
 
-  onChargerListItemClick(markerWrapper: IMarkerWrapper){
-    return this.setState({
-      showingInfoWindow: true,
-      markerWrapper: markerWrapper
-    });
-  }
-
-  getChargerTypesForFilter(): IChargerFilter[] {
+  getChargerTypesForFilter(): IChargerTypeFilter[] {
     return ChargerApi.getChargerTypes().map((e) => {
-      return { type: e.type, showType: true }
+      return {id: e.id, type: e.type, showType: true }
     })
   }
 
-  filterChargersToRender(allChargers: IMarkerWrapper[], filters: IChargerFilter[]): IMarkerWrapper[] {
-    return allChargers.filter(e => filters.map(f => f.showType === true && f.type).includes(e.type))
+  filterChargersToRender(allChargers: IChargerFilter[], filters: IChargerTypeFilter[]): IChargerFilter[] {
+
+    allChargers.forEach((charger, index) => {
+      allChargers[index].show = filters.filter(e => e.showType === true).flatMap(e => e.type).includes(charger.charger.type) ? true : false
+    })
+    return allChargers;
   }
 
   render() {
 
-    const { filterOptions, markerWrapper, showingInfoWindow, userLocation } = this.state
-    const markersToRender = this.filterChargersToRender(ChargerApi.getMarkers(), filterOptions.filterChargers)
+    const { filterOptions, markerWrapper, showingInfoWindow, markerMap, userLocation } = this.state
+    const markersToRender = this.filterChargersToRender(this.getChargersForFilter(), filterOptions.filterChargers)
 
     return (
 
-      <LoadScript id="script-loader" googleMapsApiKey="API" >
+      <LoadScript id="script-loader" googleMapsApiKey="AIzaSyBdexJZAdjGs-Bdoo8sTRf6PAdI03PUEo8" >
 
         <GoogleMap
           id='map'
@@ -101,9 +128,12 @@ class MapContainer extends Component {
           center={userLocation != null ? userLocation : ChargerApi.getMarkers()[0].marker}
           onClick={this.onMapClicked}>
 
-          <MarkerRenderer markersToRender={markersToRender} userLocation={userLocation} onMarkerClick={this.onMarkerClick} ></MarkerRenderer>
+          <UserLocation userLocation={userLocation}/>
+
+          <MarkerRenderer markersToRender={markersToRender} onMarkerClick={this.onMarkerClick} onMarkerLoad={this.onMarkerLoad} />
 
           <InfoWindowContainer
+            markerMap={markerMap}
             markerWrapper={markerWrapper}
             onMapClicked={this.onMapClicked}
             showingInfoWindow={showingInfoWindow} />
@@ -111,7 +141,7 @@ class MapContainer extends Component {
         </GoogleMap>
         <MapFilter chargerFilters={filterOptions.filterChargers} handleFilterToggle={this.handleToggle} />
 
-        <ChargerList markersToRender={markersToRender} onChargerListItemClick={this.onChargerListItemClick} />
+        <ChargerList markersToRender={markersToRender} onChargerListItemClick={this.onMarkerClick} />
       </LoadScript>
 
 

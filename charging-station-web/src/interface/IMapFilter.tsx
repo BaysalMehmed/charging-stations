@@ -1,8 +1,8 @@
-import IChargerFilter from "./IChargerFilter";
+import IChargerTypeFilter from "./IChargerTypeFilter";
 
 
 interface IMapFilter{
-    chargerFilters: IChargerFilter[]
+    chargerFilters: IChargerTypeFilter[]
     handleFilterToggle: Function
     }
 
