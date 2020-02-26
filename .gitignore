@@ -132,3 +132,7 @@ fabric.properties
 /charging-station-service/.settings/
 /charging-station-service/.gradle/
 /charging-station-service/bin/
+charging-station-web/node_modules/
+.project
+charging-station-web/.settings/org.eclipse.buildship.core.prefs
+charging-station-service/.classpath
