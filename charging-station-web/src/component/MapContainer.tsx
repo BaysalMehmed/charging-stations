@@ -49,13 +49,13 @@ class MapContainer extends Component<null, IMapContainer> {
   }
 
   onMarkerClick(markerWrapper: IChargerFilter) {
-    this.setState({
-      showingInfoWindow: false
-    })
-    return this.setState({
-      showingInfoWindow: true,
-      markerWrapper: markerWrapper
-    });
+      this.setState({ showingInfoWindow: false }, () => {
+        setTimeout(() => {
+          this.setState({ showingInfoWindow: true,
+               markerWrapper: markerWrapper });
+        }, 10);
+      })
+
   };
 
   onMarkerLoad(marker: Marker, markerId: number) {
@@ -126,7 +126,7 @@ class MapContainer extends Component<null, IMapContainer> {
           id='map'
           zoom={14}
           center={userLocation != null ? userLocation : ChargerApi.getMarkers()[0].marker}
-          onClick={this.onMapClicked}>
+          onClick={this.onMapClicked} options={{streetViewControl: false}} >
 
           <UserLocation userLocation={userLocation}/>
 

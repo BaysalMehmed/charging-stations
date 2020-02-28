@@ -18,9 +18,8 @@ class InfoWindowContainer extends Component<IMarkerWrappers> {
     const {markerWrapper, showingInfoWindow, onMapClicked, markerMap} = this.props
 
     return (<div>
-          {showingInfoWindow ?
-            <InfoWindow 
-            //position={{ lat: markerWrapper.marker.lat + 0.002, lng: markerWrapper.marker.lng }}
+          return {showingInfoWindow ?
+          <InfoWindow 
             anchor={markerMap[markerWrapper.id]}
               onCloseClick={() => onMapClicked()}
               >
