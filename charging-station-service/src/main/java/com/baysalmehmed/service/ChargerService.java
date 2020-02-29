@@ -33,7 +33,6 @@ public class ChargerService {
         } else{
             throw new ChargerDoesNotExistException();
         }
-
     }
 
     public ChargerOut getCharger(Integer chargerId){
@@ -51,10 +50,10 @@ public class ChargerService {
         List<ChargerTypeOut> chargerTypes = chargerTypeService.getChargerTypes();
         try {
             savedCharger = chargerRepository.save(ChargerDaoFactory.createCharger(newCharger));
-            return ChargerFactory.createCharger(savedCharger, chargerTypes);
         } catch (Exception e){
             throw new ChargerDidNotSaveException(e.getMessage());
         }
+        return ChargerFactory.createCharger(savedCharger, chargerTypes);
     }
 
     public void deleteCharger(Integer chargerId){

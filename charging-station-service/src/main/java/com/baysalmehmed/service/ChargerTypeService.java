@@ -1,6 +1,5 @@
 package com.baysalmehmed.service;
 
-import com.baysalmehmed.exception.type.charger.ChargerDoesNotExistException;
 import com.baysalmehmed.exception.type.chargerType.ChargerTypeDidNotSaveException;
 import com.baysalmehmed.exception.type.chargerType.ChargerTypeDoesNotExistException;
 import com.baysalmehmed.factory.chargerType.ChargerTypeDaoFactory;
@@ -28,7 +27,7 @@ public class ChargerTypeService {
         if(chargerTypesList.size() > 0){
             return ChargerTypeFactory.createChargerTypes(chargerTypesList);
         } else{
-            throw new ChargerDoesNotExistException();
+            throw new ChargerTypeDoesNotExistException();
         }
     }
 
