@@ -8,4 +8,4 @@ FROM openjdk:11-jre
 EXPOSE 8080
 
 COPY --from=builder /home/gradle/src/build/libs/charging-station-service-1.0-SNAPSHOT.jar /
-CMD java -jar /charging-station-service-1.0-SNAPSHOT.jar
+CMD java -Duser.timezone=GMT -jar /charging-station-service-1.0-SNAPSHOT.jar
