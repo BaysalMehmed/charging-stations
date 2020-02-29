@@ -1,5 +1,8 @@
 package com.baysalmehmed.service;
 
+import com.baysalmehmed.exception.type.charger.ChargerDoesNotExistException;
+import com.baysalmehmed.exception.type.chargerType.ChargerTypeDidNotSaveException;
+import com.baysalmehmed.exception.type.chargerType.ChargerTypeDoesNotExistException;
 import com.baysalmehmed.factory.chargerType.ChargerTypeDaoFactory;
 import com.baysalmehmed.factory.chargerType.ChargerTypeFactory;
 import com.baysalmehmed.model.in.ChargerTypeIn;
@@ -21,17 +24,31 @@ public class ChargerTypeService {
     }
 
     public List<ChargerTypeOut> getChargerTypes(){
-        return ChargerTypeFactory.createChargerTypes(chargerTypeRepository.findAll());
+        List<ChargerTypeDao> chargerTypesList = chargerTypeRepository.findAll();
+        if(chargerTypesList.size() > 0){
+            return ChargerTypeFactory.createChargerTypes(chargerTypesList);
+        } else{
+            throw new ChargerDoesNotExistException();
+        }
     }
 
     public ChargerTypeOut getChargerType(Integer chargerTypeId){
         Optional<ChargerTypeDao> chargerDao = chargerTypeRepository.findById(chargerTypeId);
-        return chargerDao.map(ChargerTypeFactory::createChargerType).orElse(null);
+        if (chargerDao.isPresent()) {
+            return ChargerTypeFactory.createChargerType(chargerDao.get());
+        } else {
+            throw new ChargerTypeDoesNotExistException(chargerTypeId);
+        }
     }
 
     public ChargerTypeOut createChargerType(ChargerTypeIn newChargerType){
-        ChargerTypeDao savedCharger = chargerTypeRepository.save(ChargerTypeDaoFactory.createChargerType(newChargerType));
-        return ChargerTypeFactory.createChargerType(savedCharger);
+        ChargerTypeDao savedChargerType;
+        try {
+            savedChargerType = chargerTypeRepository.save(ChargerTypeDaoFactory.createChargerType(newChargerType));
+        } catch (Exception e){
+            throw new ChargerTypeDidNotSaveException(e.getMessage());
+        }
+        return ChargerTypeFactory.createChargerType(savedChargerType);
     }
 
     public void deleteChargerType(Integer chargerTypeId){
