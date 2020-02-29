@@ -9,6 +9,8 @@ import com.baysalmehmed.model.dao.ChargerTypeDao;
 import com.baysalmehmed.model.out.ChargerTypeOut;
 import com.baysalmehmed.repository.ChargerTypeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,7 @@ public class ChargerTypeService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ChargerTypeDidNotSaveException.class)
     public ChargerTypeOut createChargerType(ChargerTypeIn newChargerType){
         ChargerTypeDao savedChargerType;
         try {

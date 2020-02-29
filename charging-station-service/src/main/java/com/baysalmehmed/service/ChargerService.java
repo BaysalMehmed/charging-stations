@@ -10,6 +10,8 @@ import com.baysalmehmed.model.out.ChargerOut;
 import com.baysalmehmed.model.out.ChargerTypeOut;
 import com.baysalmehmed.repository.ChargerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +47,7 @@ public class ChargerService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ChargerDidNotSaveException.class)
     public ChargerOut createCharger(ChargerIn newCharger){
         ChargerDao savedCharger;
         List<ChargerTypeOut> chargerTypes = chargerTypeService.getChargerTypes();
