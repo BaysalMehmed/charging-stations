@@ -8,15 +8,14 @@ class MapFilter extends Component<IMapFilter> {
 
     render() {
 
-        const { chargerFilters, handleFilterToggle} = this.props
+        const { chargerFilters, handleFilterToggle } = this.props
 
         return (
             <FormGroup>
-            {chargerFilters.map(e => {
-                return <FormControlLabel key={e.type.toString() + "label"}
-                control={<Switch key={e.type.toString() + "switch"} checked={e.showType} onChange={() => handleFilterToggle(e.type)}/>}
-                label={e.type}/>
-            })}
+                {chargerFilters.map(e => {
+                    return <FormControlLabel key={e.type + "label"} label={e.type}
+                        control={<Switch key={e.type + "switch"} checked={e.showType} onChange={() => handleFilterToggle(e.type)} />} />
+                })}
             </FormGroup>
         )
     }

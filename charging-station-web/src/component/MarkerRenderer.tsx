@@ -28,7 +28,7 @@ class MarkerRenderer extends Component<IMarkerRender> {
             <div>
                 {markersToRender.map((e, index) => {
                     return <Marker visible={e.show} key={index} position={e.charger.marker} clickable={true}
-                        onClick={() => onMarkerClick(e.charger)} onLoad={(marker => onMarkerLoad(marker, e.charger.id))} 
+                        onClick={() => onMarkerClick(e)} onLoad={(marker => onMarkerLoad(marker, e.charger.id))} 
                         icon={this.getMarker(e.charger.type)} 
                         />
                 })}

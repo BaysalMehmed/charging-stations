@@ -6,17 +6,13 @@ import ICurrentLocation from '../interface/ICurrentLocation';
 class CurrentLocation extends Component<ICurrentLocation> {
 
     render() {
-
         const {userLocation} = this.props;
 
-        var icon = {
-            url: require('../icons/location/currentLocation.png'), // url
+        const icon = {
+            url: require('../icons/location/currentLocation.png'),
             scaledSize: new google.maps.Size(50, 50)
         }
-
-        return (
-                <Marker position={userLocation} clickable={true} icon={icon } />
-        )
+        return (<Marker position={userLocation} icon={icon} />)
     }
 }
 

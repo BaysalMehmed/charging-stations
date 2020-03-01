@@ -48,14 +48,18 @@ class MapContainer extends Component<null, IMapContainer> {
     );
   }
 
-  onMarkerClick(markerWrapper: IChargerFilter) {
-      this.setState({ showingInfoWindow: false }, () => {
+  onMarkerClick(newMarkerWrapper: IChargerFilter) {
+   
+    const {markerWrapper} = this.state;
+
+    if(markerWrapper === null || (newMarkerWrapper.charger.id !== markerWrapper.charger.id)){
+      return this.setState({ showingInfoWindow: false }, () => {
         setTimeout(() => {
           this.setState({ showingInfoWindow: true,
-               markerWrapper: markerWrapper });
+               markerWrapper: newMarkerWrapper });
         }, 10);
       })
-
+    }
   };
 
   onMarkerLoad(marker: Marker, markerId: number) {
@@ -82,7 +86,7 @@ class MapContainer extends Component<null, IMapContainer> {
     const newFilterChargers = filterOptions.filterChargers.slice()
     newFilterChargers[chargerTypeIndex].showType = !filterOptions.filterChargers[chargerTypeIndex].showType
 
-    const resetFocus = markerWrapper != null ? (markerWrapper.type === chargerType ? false : true) : false
+    const resetFocus = markerWrapper != null ? (markerWrapper.charger.type === chargerType ? false : true) : false
 
     this.setState(prevState => ({
       showingInfoWindow: resetFocus,
