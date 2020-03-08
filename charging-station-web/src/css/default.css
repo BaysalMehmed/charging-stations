@@ -1,3 +1,37 @@
 #map{
     height: 500pt
 }
+
+#filter{
+  color: white;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+#chargerListItem {
+    width: 300px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #ffffff;
+    font-family: Roboto, Arial, sans-serif;
+    color: #3b3540f7;
+    text-align: center;
+  }
+
+  html {
+    background-color: #121212;
+}
+
+#chargerListItem:hover {
+    background-color: #cacaca;
+  }
+
+  .test {
+    background-color: #ffffff;
+  }
+
+  .overlay{
+    position: absolute;
+    top: 80px;
+    left: -15px;
+    z-index: 50;
+  }

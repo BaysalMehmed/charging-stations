@@ -13,16 +13,21 @@ class ChargerList extends Component<IChargerListProps> {
 
         const { markersToRender, onChargerListItemClick } = this.props
         return (
-            <Grid container spacing={3}>
-                {
-                    markersToRender.filter(e=> e.show).map(e => {
-                        return <Grid key={"grid" + e.charger.id} item xs={6} >
-                            <Paper key={"paper" + e.charger.id}  style={{ cursor: 'pointer' }} 
-                            onClick={() => onChargerListItemClick(e)}>{e.charger.type} - {e.charger.description}</Paper>
-                        </Grid>
-                    })
-                }
-            </Grid >
+            <div>
+                    <Grid className="overlay" container justify="flex-end">
+                    <Grid className="test" item  >
+                    <Grid item xs={12} >
+                        {
+                            markersToRender.filter(e => e.show).map(e => {
+                                return <Grid key={"grid" + e.charger.id} item  >
+                                    <Paper id="chargerListItem" key={"paper" + e.charger.id} style={{ cursor: 'pointer' }}
+                                        onClick={() => onChargerListItemClick(e)}>{e.charger.type} - {e.charger.description}</Paper>
+                                </Grid>
+                            })
+                        }
+                    </Grid >
+                    </Grid></Grid>
+            </div>
         )
     }
 }

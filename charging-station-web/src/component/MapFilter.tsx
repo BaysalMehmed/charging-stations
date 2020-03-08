@@ -13,7 +13,7 @@ class MapFilter extends Component<IMapFilter> {
         return (
             <FormGroup>
                 {chargerFilters.map(e => {
-                    return <FormControlLabel key={e.type + "label"} label={e.type}
+                    return <FormControlLabel id="filter" key={e.type + "label"} label={e.type}
                         control={<Switch key={e.type + "switch"} checked={e.showType} onChange={() => handleFilterToggle(e.type)} />} />
                 })}
             </FormGroup>
