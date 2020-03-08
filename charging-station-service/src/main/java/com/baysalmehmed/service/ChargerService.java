@@ -27,10 +27,17 @@ public class ChargerService {
         this.chargerTypeService = chargerTypeService;
     }
 
-    public List<ChargerOut> getChargers(){
+    public List<ChargerOut> getChargers(Double latitude, Double longitude, Double miles){
         List<ChargerTypeOut> chargerTypes = chargerTypeService.getChargerTypes();
-        List<ChargerDao> chargerList = chargerRepository.findAll();
-        if(chargerList.size() > 0){
+
+        List<ChargerDao> chargerList;
+        if(latitude != null && longitude != null && miles != null){
+            chargerList = chargerRepository.getChargersWithinRadius(latitude, longitude, miles);
+        } else {
+            chargerList = chargerRepository.findAll();
+        }
+
+        if(!chargerList.isEmpty()){
             return ChargerFactory.createChargers(chargerList, chargerTypes);
         } else{
             throw new ChargerDoesNotExistException();

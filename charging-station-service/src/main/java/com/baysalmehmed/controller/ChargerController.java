@@ -17,8 +17,11 @@ public class ChargerController {
     }
 
     @RequestMapping("/chargers")
-    public List<ChargerOut> getAllChargers(){
-        return chargerService.getChargers();
+    public List<ChargerOut> getAllChargers(
+            @RequestParam(name = "latitude", required = false) Double latitude,
+            @RequestParam(name = "longitude", required = false) Double longitude,
+            @RequestParam(name = "miles", required = false) Double miles){
+        return chargerService.getChargers(latitude, longitude, miles);
     }
 
     @RequestMapping("/charger")
