@@ -2,7 +2,7 @@ import IMarker from "./IMarker";
 
 interface IMarkerWrapper {
   id: number
-  marker: IMarker
+  location: IMarker
   description: String
   type: String
   totalSpaces: number
